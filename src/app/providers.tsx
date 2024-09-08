@@ -1,21 +1,25 @@
 "use client";
 
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
-import { useMemo, type FC, type ReactNode } from "react";
 import '@solana/wallet-adapter-react-ui/styles.css';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { FC, ReactNode } from "react";
 
-export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
-	const network = WalletAdapterNetwork.Devnet;
-	const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+const queryClient = new QueryClient();
+
+export const Providers: FC<{ endpoint: string | undefined, children: ReactNode }> = ({ endpoint, children }) => {
+	if (!endpoint) {
+		throw new Error("please add RPC_ENDPOINT to .env");
+	}
 
 	return (
 		<ConnectionProvider endpoint={endpoint}>
 			<WalletProvider wallets={[]} autoConnect>
 				<WalletModalProvider>
-					{children}
+					<QueryClientProvider client={queryClient}>
+						{children}
+					</QueryClientProvider>
 				</WalletModalProvider>
 			</WalletProvider>
 		</ConnectionProvider>
