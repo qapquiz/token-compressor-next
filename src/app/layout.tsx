@@ -25,15 +25,12 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const endpoint = RPC_ENDPOINT;
-	console.log("endpoint", endpoint);
-
 	return (
 		<html lang="en">
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<Providers endpoint={endpoint}>
+				<Providers endpoint={RPC_ENDPOINT}>
 					<div className="w-screen h-screen bg-black p-8">
 						{children}
 					</div>

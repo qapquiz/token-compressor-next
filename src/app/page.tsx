@@ -3,12 +3,11 @@
 import { NavBar } from "@/components/NavBar";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
-import { getCompressedTokenAccountsByOwner, getParsedTokenAccountsByOwner } from "@/lib/solana";
+import { getCompressedTokens, getTokens } from "@/lib/solana";
 
 export default function Home() {
 	const { connection } = useConnection();
 	const { publicKey } = useWallet();
-	// const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	const { data: tokens, error: getTokensError } = useQuery({
 		queryKey: ["userTokens", publicKey?.toBase58()],
@@ -17,8 +16,7 @@ export default function Home() {
 				throw new Error("cannot fetch tokens from the chain")
 			}
 
-			return (await getParsedTokenAccountsByOwner(connection, publicKey))
-				.map(obj => obj.account)
+			return await getTokens(connection, publicKey);
 		},
 	});
 
@@ -29,7 +27,7 @@ export default function Home() {
 				throw new Error("cannot fetch compressed token from the RPC")
 			}
 
-			return (await getCompressedTokenAccountsByOwner(publicKey, connection.rpcEndpoint))
+			return (await getCompressedTokens(publicKey, connection.rpcEndpoint))
 		}
 	})
 
