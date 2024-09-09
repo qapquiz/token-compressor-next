@@ -1,7 +1,6 @@
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import type { Connection, PublicKey } from "@solana/web3.js";
-
-export const RPC_ENDPOINT = process.env.RPC_ENDPOINT;
+import env from "./env";
 
 export type CompressedTokenAccountsByOwnerResponse = {
 	result: {
@@ -49,7 +48,7 @@ export async function getTokens(connection: Connection, wallet: PublicKey): Prom
 
 export async function getCompressedTokens(
 	wallet: PublicKey,
-	endpoint: string | undefined = RPC_ENDPOINT
+	endpoint: string | undefined = env.RPC_ENDPOINT
 ): Promise<Tokens[]> {
 	if (!endpoint) {
 		throw new Error("RPC endpoint not provided. You have to send directly or set the RPC_ENDPOINT environment variable.");
