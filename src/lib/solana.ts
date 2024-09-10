@@ -16,7 +16,7 @@ export type CompressedTokenAccountsByOwnerResponse = {
 	};
 }
 
-export type Tokens = {
+export type Token = {
 	mint: string;
 	decimals: number;
 	amount: number;
@@ -24,7 +24,7 @@ export type Tokens = {
 	isCompressed: boolean;
 };
 
-export async function getTokens(connection: Connection, wallet: PublicKey): Promise<Tokens[]> {
+export async function getTokens(connection: Connection, wallet: PublicKey): Promise<Token[]> {
 	// @todo add support for token2022 program (compressed token not support token2022 yet.)
 	const [tokens] = await Promise.all([
 		connection.getParsedTokenAccountsByOwner(wallet, { programId: TOKEN_PROGRAM_ID }),
@@ -49,7 +49,7 @@ export async function getTokens(connection: Connection, wallet: PublicKey): Prom
 export async function getCompressedTokens(
 	wallet: PublicKey,
 	endpoint: string | undefined = env.RPC_ENDPOINT
-): Promise<Tokens[]> {
+): Promise<Token[]> {
 	if (!endpoint) {
 		throw new Error("RPC endpoint not provided. You have to send directly or set the RPC_ENDPOINT environment variable.");
 	}
@@ -86,7 +86,7 @@ export async function getCompressedTokens(
 	return cTokensWithMedata;
 }
 
-export async function getTokenMetadata(tokens: Tokens[]): Promise<Tokens[]> {
+export async function getTokenMetadata(tokens: Token[]): Promise<Token[]> {
 	// @todo get token metadata and uri from jup tokens api
 	return tokens;
 }
